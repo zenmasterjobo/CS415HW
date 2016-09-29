@@ -242,8 +242,23 @@ def Problem3b(A, B, C, D):
     Q = Exp(C, D)
     return Divide(P, Q)
 
+def primalitytest(N):
+    print N
+    #a = randint(0,N-1)
+    #x = Exp(a,N-1)
+    #if(mod(x,N) == 1):
+    #   return true
+   # return PrimalityTest(N)
+   #
+
+   
+def PrimalityTest(N):
+    x = primalitytest(dec2bin(N))
+    return x
+
 if __name__ == "__main__":
     while True:
+        PrimalityTest(16)
         option = int(raw_input("Enter option(1: test Problem3a, 2: test Problem3b, 3: quit): "))
         if option == 3:
             exit()
@@ -259,17 +274,3 @@ if __name__ == "__main__":
         
 
         
-
-
-
-
-
-
-
-
-
-
-
-
-
-
