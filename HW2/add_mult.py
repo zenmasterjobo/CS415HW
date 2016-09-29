@@ -233,6 +233,44 @@ def Problem3a(A, B, C, D):
     '''
     return Sub(Exp(A, B), Exp(C, D))
 
+def findNeg(A,B):
+    return sub(A,B)
+
+# Binary representation of extended_GCD
+def exGCD(A, B):
+    if (zero(B)) :                          # Check if B is 0
+        return [1], [], A,[]                # Return (1,0,A)
+    x, y, d, s = exGCD(B , mod(A,B))        # Recursive call with (x, y, GCD, sign)
+    '''
+        CURRENT CHECKS DO NOT CURRENTLY WORK.
+        NEED TO FIGURE OUT HOW TO KEEP THE SIGN VALUE
+    '''
+    # Check if x is zero. Since we need to subtract from this value 
+    # it will be come a negative number, so we will add to it instead.
+    if(zero(x) or compare(s,[0,1])):
+        s = [0,1]
+        x = add(x,mult(quotient(A,B),y))
+    '''
+        CURRENT CHECKS DO NOT CURRENTLY WORK.
+        NEED TO FIGURE OUT HOW TO KEEP THE SIGN
+    '''
+    # Check if y is zero. Since we need to subtract from this value 
+    # it will be come a negative number, so we will add to it instead.
+    if(zero(y) or compare(s,[1])):
+        s = [1]
+    else:                                   # Otherwise just subtract from x  
+        x = sub(x,mult(quotient(A,B),y))
+    
+
+    return y, x, d, s                       # Return (y,x,d,s)
+
+# Decimal representation of extended_GCD
+def ExGCD(A, B):
+    # Change input values to binary and then call binary extended_GCD
+    x, y, d, s = exGCD(dec2bin(A),dec2bin(B))   
+    # Return to caller decimal represntations of recieved binaries
+    return bin2dec(x), bin2dec(y), bin2dec(d), bin2dec(s)
+    
 def Problem3b(A, B, C, D):
     '''
     Input: four integers A, B, C, D such that 0 < A, B, C, D < 1000
@@ -243,7 +281,10 @@ def Problem3b(A, B, C, D):
     return Divide(P, Q)
 
 if __name__ == "__main__":
-    while True:
+        print(ExGCD(1273,941))
+        print(ExGCD(13,9))
+        '''
+        while True:
         option = int(raw_input("Enter option(1: test Problem3a, 2: test Problem3b, 3: quit): "))
         if option == 3:
             exit()
@@ -254,7 +295,7 @@ if __name__ == "__main__":
         if option == 2:
             result = Problem3b(A, B, C, D)
             print(result)
-        
+       ''' 
                     
         
 
