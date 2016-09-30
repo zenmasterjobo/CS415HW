@@ -239,29 +239,23 @@ def findNeg(A,B):
 # Binary representation of extended_GCD
 def exGCD(A, B):
     if (zero(B)) :                          # Check if B is 0
-        return [1], [], A,[]                # Return (1,0,A)
+        return [1], [], A, []                # Return (1,0,A)
     x, y, d, s = exGCD(B , mod(A,B))        # Recursive call with (x, y, GCD, sign)
-    '''
-        CURRENT CHECKS DO NOT CURRENTLY WORK.
-        NEED TO FIGURE OUT HOW TO KEEP THE SIGN VALUE
-    '''
     # Check if x is zero. Since we need to subtract from this value 
     # it will be come a negative number, so we will add to it instead.
-    if(zero(x) or compare(s,[0,1])):
-        s = [0,1]
-        x = add(x,mult(quotient(A,B),y))
-    '''
-        CURRENT CHECKS DO NOT CURRENTLY WORK.
-        NEED TO FIGURE OUT HOW TO KEEP THE SIGN
-    '''
     # Check if y is zero. Since we need to subtract from this value 
     # it will be come a negative number, so we will add to it instead.
-    if(zero(y) or compare(s,[1])):
+    # Otherwise, subtract x from the multiplication of y and the quotient of A,B.
+    if(zero(x) or compare(s,[0,1]) == 2):
+        s = [0,1]
+        x = add(x,mult(quotient(A,B),y))
+    elif(zero(y) or compare(s,[1]) == 1):
         s = [1]
-    else:                                   # Otherwise just subtract from x  
+        x = add(x,mult(quotient(A,B),y))
+    else:
+        print "here"
+        s = []
         x = sub(x,mult(quotient(A,B),y))
-    
-
     return y, x, d, s                       # Return (y,x,d,s)
 
 # Decimal representation of extended_GCD
@@ -271,6 +265,14 @@ def ExGCD(A, B):
     # Return to caller decimal represntations of recieved binaries
     return bin2dec(x), bin2dec(y), bin2dec(d), bin2dec(s)
     
+def modInv(A,B):
+    x, y, d, s = exGCD(A,B)
+    if(compare(d,[1])):
+        return mod(x,B)
+
+def ModInv(A,B):
+    return modInv(dec2bin(A),dec2bin(B))
+
 def Problem3b(A, B, C, D):
     '''
     Input: four integers A, B, C, D such that 0 < A, B, C, D < 1000
@@ -283,6 +285,10 @@ def Problem3b(A, B, C, D):
 if __name__ == "__main__":
         print(ExGCD(1273,941))
         print(ExGCD(13,9))
+        print(ExGCD(300,1321))
+        print(ExGCD(422,26424))
+        print(ExGCD(10,5))
+        print(ExGCD(17,33))
         '''
         while True:
         option = int(raw_input("Enter option(1: test Problem3a, 2: test Problem3b, 3: quit): "))
@@ -296,7 +302,7 @@ if __name__ == "__main__":
             result = Problem3b(A, B, C, D)
             print(result)
        ''' 
-                    
+                   
         
 
         
