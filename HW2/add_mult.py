@@ -282,7 +282,8 @@ def Problem3b(A, B, C, D):
 
 def primalitytest(N):
     print N
-    #a = randint(0,N-1)
+    a = dec2bin(randint(0,bin2dec(N)-1))
+    print a
     #x = Exp(a,N-1)
     #if(mod(x,N) == 1):
     #   return true
@@ -295,10 +296,10 @@ def PrimalityTest(N):
     return x
 
 if __name__ == "__main__":
-    while True:
+#    while True:
         PrimalityTest(16)
-        print(ExGCD(1273,941))
-        print(ExGCD(13,9))
+#        print(ExGCD(1273,941))
+#        print(ExGCD(13,9))
         '''
         while True:
         option = int(raw_input("Enter option(1: test Problem3a, 2: test Problem3b, 3: quit): "))
