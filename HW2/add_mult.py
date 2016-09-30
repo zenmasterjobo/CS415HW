@@ -282,7 +282,23 @@ def Problem3b(A, B, C, D):
     Q = Exp(C, D)
     return Divide(P, Q)
 
+def primalitytest(N):
+    print N
+    #a = randint(0,N-1)
+    #x = Exp(a,N-1)
+    #if(mod(x,N) == 1):
+    #   return true
+   # return PrimalityTest(N)
+   #
+
+   
+def PrimalityTest(N):
+    x = primalitytest(dec2bin(N))
+    return x
+
 if __name__ == "__main__":
+    while True:
+        PrimalityTest(16)
         print(ExGCD(1273,941))
         print(ExGCD(13,9))
         print(ExGCD(300,1321))
@@ -306,17 +322,3 @@ if __name__ == "__main__":
         
 
         
-
-
-
-
-
-
-
-
-
-
-
-
-
-
