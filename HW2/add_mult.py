@@ -309,35 +309,77 @@ def spawnrandom(N):
     x = randint(1,bin2dec(N)-1)
     return dec2bin(x)
 
+def randomNumber(N):
+    num = [1]
+    for i in range (N-2):
+        num.append(randint(0,1))
+    num.append(1)
+    return bin2dec(num)
+
+def modExp(x,y,N):
+    if(zero(y)):
+        return [1]
+    z = modExp(x,quotient(y,[0,1]),N)
+    if (compare(mod(y,[0,1]),[]) == 0):
+        return mod(mult(z,z),N)
+    else:
+        return mod(mult(x,mult(z,z)),N)
+
+def ModExp(A,e,M):
+    return bin2dec(modExp(dec2bin(A),dec2bin(e),dec2bin(M)))
+    
 def RSAKeyGenerate(N):
     
     while(True):
-        x = int(getrandbits(N))
-        print("trying x",x)
+        x = randomNumber(N)
         if(x != 0):
             if(Primality2(x,10)):
-                p = x
-                break
+                if(Mod(x,3) == 2):
+                    p = x
+                    break
     while(True):
-        y = int(getrandbits(N))
-        print("trying y",y)
+        y = randomNumber(N)
         if(y != 0):
             if(Primality2(y,10)):
-                q = y
-                break
+                if(Mod(y,3) == 2):
+                    q = y
+                    break
+
     n = mult(dec2bin(p),dec2bin(q))
     return bin2dec(n),p,q
 
+def RSAencrypt(M,e,N):
+    return modExp(M,e,N)
+
+def RSAEncrypt(M,e,N):
+    return bin2dec(RSAencrypt(dec2bin(M),dec2bin(N),dec2bin(e)))
+    
+def RSAdecrypt(E,d,N):
+    return modExp(E,d,N)
+
+def RSADecrypt(E,d,N):
+    return bin2dec(RSAdecrypt(dec2bin(E),dec2bin(N),dec2bin(d)))
+
+def RSAcreateD(P,Q,e):
+    return modInv(e,mult(sub(P,[1]),sub(Q,[1])))
+
+def RSACreateD(P,Q,e):
+    return bin2dec(RSAcreateD(dec2bin(P),dec2bin(Q),dec2bin(e)))
+
 if __name__ == "__main__":
-    print(ModInv(7,26))
-    print(ModInv(19,26))
-    print(ModInv(52,89))
+    #randomNumber(5)
     #x = Primality2(212, 8)
     #print(x)
-    #q,y,z = RSAKeyGenerate(20)
-    #print(q,y,z)
-    #print(sub([0,0,1,0],[0,0,0,1]))
-    #want to add the sub of   
+    M =1234567890
+    print("Original Message",M)
+    N,p,q = RSAKeyGenerate(5)
+    print("p,q,N ",p,q,N)
+    d = RSACreateD(p,q,3)
+    print("D",d)
+    E = RSAEncrypt(M,3,N)
+    print("Encyrpted Message",E)
+    M = RSADecrypt(E,d,N)
+    print("Decrypted Message",M)
 '''
     print("20,79",ExGCD(20,79))
     print("3,62",ExGCD(3,62))
