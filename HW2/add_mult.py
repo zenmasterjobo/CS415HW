@@ -283,41 +283,56 @@ def Problem3b(A, B, C, D):
     return Divide(P, Q)
 
 def primalitytest(N):
-    print N
-    #a = randint(0,N-1)
-    #x = Exp(a,N-1)
-    #if(mod(x,N) == 1):
-    #   return true
-   # return PrimalityTest(N)
-   #
+    for i in range(2,bin2dec(N)):
+        n = sub(N,[1])
+        a = exp(dec2bin(i),n)
 
+        if (Mod(bin2dec(a),bin2dec(N)) != 1):
+            print "Not a Prime"
+            return False
+    print "Number is Prime!"    
+    return True
+        
+# x = Exp(a,N-1)
+# if(mod(x,N) == 1):
+#    return true
+# return PrimalityTest(N)
+#
    
 def PrimalityTest(N):
     x = primalitytest(dec2bin(N))
     return x
 
 if __name__ == "__main__":
-    while True:
-        PrimalityTest(16)
-        print(ExGCD(1273,941))
-        print(ExGCD(13,9))
-        print(ExGCD(300,1321))
-        print(ExGCD(422,26424))
-        print(ExGCD(10,5))
-        print(ExGCD(17,33))
-        '''
-        while True:
-        option = int(raw_input("Enter option(1: test Problem3a, 2: test Problem3b, 3: quit): "))
-        if option == 3:
-            exit()
-        A, B, C, D = map(int, raw_input("Enter four numbers between 0 and 1000(separated by spaces): ").split())
-        if option == 1:
-            result = Problem3a(A, B, C, D)
-            print(result)
+#    while True:
+#    PrimalityTest(16)
+#    PrimalityTest(2)
+#    PrimalityTest(23)
+#    PrimalityTest(17)
+#    PrimalityTest(997)
+#    PrimalityTest(104729)
+    print(ExGCD(1273,941))
+    print(ExGCD(13,9))
+    #        print(ExGCD(300,1321))
+    print(ExGCD(422,26424))
+    print(ExGCD(10,5))
+#        print(ExGCD(17,33))
+##        print(ExGCD(1273,941))
+#        print(ExGCD(13,9))
+
+'''
+while True:
+option = int(raw_input("Enter option(1: test Problem3a, 2: test Problem3b, 3: quit): "))
+if option == 3:
+exit()
+A, B, C, D = map(int, raw_input("Enter four numbers between 0 and 1000(separated by spaces): ").split())
+if option == 1:
+result = Problem3a(A, B, C, D)
+print(result)
         if option == 2:
-            result = Problem3b(A, B, C, D)
-            print(result)
-       ''' 
+result = Problem3b(A, B, C, D)
+print(result)
+''' 
                    
         
 
