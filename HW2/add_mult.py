@@ -267,16 +267,22 @@ def ExGCD(A, B):
 def modInv(A,B):
     x, y, d, s = exGCD(A,B)
     if(compare(d,[1]) == 0):
-        return x,s
-    return [0],[0]
+        if(compare(s,[1]) == 0):
+            if(compare(x,B) == 1):
+                # The inverse is a negative number > B
+                while(compare(x,B) == 1):
+                    c = sub(x,B)
+                    if(compare(c,[])== 0):
+                        x = (B,x)
+            else:
+                # The inverse is a negative number < B
+                x = sub(B,x)
+            return x
+        return x # The inverse is a postive number.
+    return [] # There is no modular inverse for the two passed numbers.
 
 def ModInv(A,B):
-    x,s = modInv(dec2bin(A),dec2bin(B))
-    if(compare(s,[1]) == 0):
-        x = -1*bin2dec(x)
-        while(x < 0):
-            x += B
-        return x
+    x = modInv(dec2bin(A),dec2bin(B))
     return bin2dec(x)
 
 def Problem3b(A, B, C, D):
@@ -294,13 +300,6 @@ def primality2(N,k):
         if (compare(mod(exp(a,sub(N,[1])),N),[1]) != 0):
             return False
     return True
-
-    
-# x = Exp(a,N-1)
-# if(mod(x,N) == 1):
-#    return true
-# return PrimalityTest(N)
-#
    
 def Primality2(N,k):
     x = primality2(dec2bin(N),k)
@@ -328,12 +327,17 @@ def RSAKeyGenerate(N):
                 break
     n = mult(dec2bin(p),dec2bin(q))
     return bin2dec(n),p,q
-    #x,y,d,s = ExGCD(3,(p-1)*(q-1))
+
 if __name__ == "__main__":
+    print(ModInv(7,26))
+    print(ModInv(19,26))
+    print(ModInv(52,89))
     #x = Primality2(212, 8)
     #print(x)
-    q,y,z = RSAKeyGenerate(20)
-    print(q,y,z)
+    #q,y,z = RSAKeyGenerate(20)
+    #print(q,y,z)
+    #print(sub([0,0,1,0],[0,0,0,1]))
+    #want to add the sub of   
 '''
     print("20,79",ExGCD(20,79))
     print("3,62",ExGCD(3,62))
