@@ -291,13 +291,8 @@ def Problem3b(A, B, C, D):
 def primality2(N,k):
     for i in range (k):
         a = spawnrandom(N)
-        #n = sub(N,[1])
-        #e = exp(a,n)
-        #m = mod(e,N)
-        #print(bin2dec(n),bin2dec(e),bin2dec(m))
         if (compare(mod(exp(a,sub(N,[1])),N),[1]) != 0):
             return False
-        print("finished one cycle")
     return True
 
     
@@ -315,10 +310,30 @@ def spawnrandom(N):
     x = randint(1,bin2dec(N)-1)
     return dec2bin(x)
 
-
+def RSAKeyGenerate(N):
+    
+    while(True):
+        x = int(getrandbits(N))
+        print("trying x",x)
+        if(x != 0):
+            if(Primality2(x,10)):
+                p = x
+                break
+    while(True):
+        y = int(getrandbits(N))
+        print("trying y",y)
+        if(y != 0):
+            if(Primality2(y,10)):
+                q = y
+                break
+    n = mult(dec2bin(p),dec2bin(q))
+    return bin2dec(n),p,q
+    #x,y,d,s = ExGCD(3,(p-1)*(q-1))
 if __name__ == "__main__":
-    x = Primality2(212, 8)
-    print(x)
+    #x = Primality2(212, 8)
+    #print(x)
+    q,y,z = RSAKeyGenerate(20)
+    print(q,y,z)
 '''
     print("20,79",ExGCD(20,79))
     print("3,62",ExGCD(3,62))
