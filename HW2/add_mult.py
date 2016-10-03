@@ -289,15 +289,15 @@ def Problem3b(A, B, C, D):
     return Divide(P, Q)
 
 def primality2(N,k):
-    array = []
     for i in range (k):
-        array = spawnrandom()
-        r = mod(exp(array,sub(N,[1])),N)
-        print(r)
-        if (compare(r,[1]) != 0):
-            print "The number is not Prime"
+        a = spawnrandom(N)
+        #n = sub(N,[1])
+        #e = exp(a,n)
+        #m = mod(e,N)
+        #print(bin2dec(n),bin2dec(e),bin2dec(m))
+        if (compare(mod(exp(a,sub(N,[1])),N),[1]) != 0):
             return False
-    print "prime!"
+        print("finished one cycle")
     return True
 
     
@@ -311,14 +311,15 @@ def Primality2(N,k):
     x = primality2(dec2bin(N),k)
     return x
 
-def spawnrandom():
-    x = getrandbits(64)
-    if(compare(dec2bin(x),[0]) == 0):
-        spawnrandom()
+def spawnrandom(N):
+    x = randint(1,bin2dec(N)-1)
     return dec2bin(x)
 
 
 if __name__ == "__main__":
+    x = Primality2(212, 8)
+    print(x)
+'''
     print("20,79",ExGCD(20,79))
     print("3,62",ExGCD(3,62))
     print("21,91",ExGCD(21,91))
@@ -328,6 +329,7 @@ if __name__ == "__main__":
     print("21,91",ModInv(21,91))
     print("20,70",ModInv(20,70))
     print("91,20",ModInv(91,20))
+'''
 #    while True:
 #    PrimalityTest(16)
 #    PrimalityTest(2)
@@ -336,7 +338,6 @@ if __name__ == "__main__":
 #    PrimalityTest(997)
 #    PrimalityTest(104729)
 
-    x = Primality2(13, 10)
 
     #print(ExGCD(1273,941))
     #print(ExGCD(13,9))
