@@ -267,18 +267,22 @@ def ExGCD(A, B):
 def modInv(A,B):
     x, y, d, s = exGCD(A,B)
     if(compare(d,[1]) == 0):
-        #if(compare(s,[1]) == 0):
-            #while( 
-        return x,s
-    return [0],[0]
+        if(compare(s,[1]) == 0):
+            if(compare(x,B) == 1):
+                # The inverse is a negative number > B
+                while(compare(x,B) == 1):
+                    c = sub(x,B)
+                    if(compare(c,[])== 0):
+                        x = (B,x)
+            else:
+                # The inverse is a negative number < B
+                x = sub(B,x)
+            return x
+        return x # The inverse is a postive number.
+    return [] # There is no modular inverse for the two passed numbers.
 
 def ModInv(A,B):
-    x,s = modInv(dec2bin(A),dec2bin(B))
-    if(compare(s,[1]) == 0):
-        x = -1*bin2dec(x)
-        while(x < 0):
-            x += B
-        return x
+    x = modInv(dec2bin(A),dec2bin(B))
     return bin2dec(x)
 
 def Problem3b(A, B, C, D):
@@ -296,13 +300,6 @@ def primality2(N,k):
         if (compare(mod(exp(a,sub(N,[1])),N),[1]) != 0):
             return False
     return True
-
-    
-# x = Exp(a,N-1)
-# if(mod(x,N) == 1):
-#    return true
-# return PrimalityTest(N)
-#
    
 def Primality2(N,k):
     x = primality2(dec2bin(N),k)
@@ -314,62 +311,75 @@ def spawnrandom(N):
 
 def randomNumber(N):
     num = [1]
-    for i in range (N-1):
+    for i in range (N-2):
         num.append(randint(0,1))
+    num.append(1)
     return bin2dec(num)
+
+def modExp(x,y,N):
+    if(zero(y)):
+        return [1]
+    z = modExp(x,quotient(y,[0,1]),N)
+    if (compare(mod(y,[0,1]),[]) == 0):
+        return mod(mult(z,z),N)
+    else:
+        return mod(mult(x,mult(z,z)),N)
+
+def ModExp(A,e,M):
+    return bin2dec(modExp(dec2bin(A),dec2bin(e),dec2bin(M)))
     
 def RSAKeyGenerate(N):
     
     while(True):
         x = randomNumber(N)
-        print("trying x",x)
         if(x != 0):
             if(Primality2(x,10)):
-                p = x
-                break
+                if(Mod(x,3) == 2):
+                    p = x
+                    break
     while(True):
         y = randomNumber(N)
-        print("trying y",y)
         if(y != 0):
             if(Primality2(y,10)):
-                q = y
-                break
-    n = mult(dec1bin(p),dec2bin(q))
+                if(Mod(y,3) == 2):
+                    q = y
+                    break
+
+    n = mult(dec2bin(p),dec2bin(q))
     return bin2dec(n),p,q
-    #x,y,d,s = ExGCD(3,(p-1)*(q-1))
 
-def RSAencrypt(X,N,e):
-    return mod(exp(X,e),N)
+def RSAencrypt(M,e,N):
+    return modExp(M,e,N)
 
-def RSAEncrypt(X,N,e):
-    return bin2dec(RSAencrypt(dec2bin(X),dec2bin(N),dec2bin(e)))
+def RSAEncrypt(M,e,N):
+    return bin2dec(RSAencrypt(dec2bin(M),dec2bin(N),dec2bin(e)))
     
-def RSAdecrypt(Y,N,d):
-    return mod(exp(Y,d),N)
+def RSAdecrypt(E,d,N):
+    return modExp(E,d,N)
 
-def RSADecrypt(Y,N,d):
-    return bin2dec(RSAdecrypt(dec2bin(Y),dec2bin(N),dec2bin(d)))
+def RSADecrypt(E,d,N):
+    return bin2dec(RSAdecrypt(dec2bin(E),dec2bin(N),dec2bin(d)))
 
 def RSAcreateD(P,Q,e):
     return modInv(e,mult(sub(P,[1]),sub(Q,[1])))
 
 def RSACreateD(P,Q,e):
-    print("INSDE CREATE ",P,Q,e)
-    return ModInv(e,(P-1)*(Q-1))
-    # return bin2dec(RSAcreateD(dec2bin(P),dec2bin(Q),dec2bin(e)))
+    return bin2dec(RSAcreateD(dec2bin(P),dec2bin(Q),dec2bin(e)))
 
 if __name__ == "__main__":
     #randomNumber(5)
     #x = Primality2(212, 8)
     #print(x)
+    M =1234567890
+    print("Original Message",M)
     N,p,q = RSAKeyGenerate(5)
     print("p,q,N ",p,q,N)
     d = RSACreateD(p,q,3)
-    print("d",d)
-    E = RSAEncrypt(980,N,3)
-    print("e",E)
-    M = RSADecrypt(E,N,d)
-    print("m",M)
+    print("D",d)
+    E = RSAEncrypt(M,3,N)
+    print("Encyrpted Message",E)
+    M = RSADecrypt(E,d,N)
+    print("Decrypted Message",M)
 '''
     print("20,79",ExGCD(20,79))
     print("3,62",ExGCD(3,62))
