@@ -267,6 +267,8 @@ def ExGCD(A, B):
 def modInv(A,B):
     x, y, d, s = exGCD(A,B)
     if(compare(d,[1]) == 0):
+        #if(compare(s,[1]) == 0):
+            #while( 
         return x,s
     return [0],[0]
 
@@ -310,30 +312,64 @@ def spawnrandom(N):
     x = randint(1,bin2dec(N)-1)
     return dec2bin(x)
 
+def randomNumber(N):
+    num = [1]
+    for i in range (N-1):
+        num.append(randint(0,1))
+    return bin2dec(num)
+    
 def RSAKeyGenerate(N):
     
     while(True):
-        x = int(getrandbits(N))
+        x = randomNumber(N)
         print("trying x",x)
         if(x != 0):
             if(Primality2(x,10)):
                 p = x
                 break
     while(True):
-        y = int(getrandbits(N))
+        y = randomNumber(N)
         print("trying y",y)
         if(y != 0):
             if(Primality2(y,10)):
                 q = y
                 break
-    n = mult(dec2bin(p),dec2bin(q))
+    n = mult(dec1bin(p),dec2bin(q))
     return bin2dec(n),p,q
     #x,y,d,s = ExGCD(3,(p-1)*(q-1))
+
+def RSAencrypt(X,N,e):
+    return mod(exp(X,e),N)
+
+def RSAEncrypt(X,N,e):
+    return bin2dec(RSAencrypt(dec2bin(X),dec2bin(N),dec2bin(e)))
+    
+def RSAdecrypt(Y,N,d):
+    return mod(exp(Y,d),N)
+
+def RSADecrypt(Y,N,d):
+    return bin2dec(RSAdecrypt(dec2bin(Y),dec2bin(N),dec2bin(d)))
+
+def RSAcreateD(P,Q,e):
+    return modInv(e,mult(sub(P,[1]),sub(Q,[1])))
+
+def RSACreateD(P,Q,e):
+    print("INSDE CREATE ",P,Q,e)
+    return ModInv(e,(P-1)*(Q-1))
+    # return bin2dec(RSAcreateD(dec2bin(P),dec2bin(Q),dec2bin(e)))
+
 if __name__ == "__main__":
+    #randomNumber(5)
     #x = Primality2(212, 8)
     #print(x)
-    q,y,z = RSAKeyGenerate(20)
-    print(q,y,z)
+    N,p,q = RSAKeyGenerate(5)
+    print("p,q,N ",p,q,N)
+    d = RSACreateD(p,q,3)
+    print("d",d)
+    E = RSAEncrypt(980,N,3)
+    print("e",E)
+    M = RSADecrypt(E,N,d)
+    print("m",M)
 '''
     print("20,79",ExGCD(20,79))
     print("3,62",ExGCD(3,62))
