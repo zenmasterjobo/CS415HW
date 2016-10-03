@@ -282,26 +282,35 @@ def Problem3b(A, B, C, D):
     Q = Exp(C, D)
     return Divide(P, Q)
 
-def primalitytest(N):
-    for i in range(2,bin2dec(N)):
-        n = sub(N,[1])
-        a = exp(dec2bin(i),n)
-
-        if (Mod(bin2dec(a),bin2dec(N)) != 1):
-            print "Not a Prime"
+def primality2(N,k):
+    array = []
+    for i in range (k):
+        array = spawnrandom()
+        r = mod(exp(array,sub(N,[1])),N)
+        print(r)
+        if (compare(r,[1]) != 0):
+            print "The number is not Prime"
             return False
-    print "Number is Prime!"    
+    print "prime!"
     return True
-        
+
+    
 # x = Exp(a,N-1)
 # if(mod(x,N) == 1):
 #    return true
 # return PrimalityTest(N)
 #
    
-def PrimalityTest(N):
-    x = primalitytest(dec2bin(N))
+def Primality2(N,k):
+    x = primality2(dec2bin(N),k)
     return x
+
+def spawnrandom():
+    x = getrandbits(64)
+    if(compare(dec2bin(x),[0]) == 0):
+        spawnrandom()
+    return dec2bin(x)
+
 
 if __name__ == "__main__":
 #    while True:
@@ -311,14 +320,8 @@ if __name__ == "__main__":
 #    PrimalityTest(17)
 #    PrimalityTest(997)
 #    PrimalityTest(104729)
-    print(ExGCD(1273,941))
-    print(ExGCD(13,9))
-    #        print(ExGCD(300,1321))
-    print(ExGCD(422,26424))
-    print(ExGCD(10,5))
-#        print(ExGCD(17,33))
-##        print(ExGCD(1273,941))
-#        print(ExGCD(13,9))
+
+    x = Primality2(13, 10)
 
 '''
 while True:
