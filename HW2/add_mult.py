@@ -253,7 +253,6 @@ def exGCD(A, B):
         s = [1]
         x = add(x,mult(quotient(A,B),y))
     else:
-        print "here"
         s = []
         x = sub(x,mult(quotient(A,B),y))
     return y, x, d, s                       # Return (y,x,d,s)
@@ -267,11 +266,18 @@ def ExGCD(A, B):
     
 def modInv(A,B):
     x, y, d, s = exGCD(A,B)
-    if(compare(d,[1])):
-        return mod(x,B)
+    if(compare(d,[1]) == 0):
+        return x,s
+    return [0],[0]
 
 def ModInv(A,B):
-    return modInv(dec2bin(A),dec2bin(B))
+    x,s = modInv(dec2bin(A),dec2bin(B))
+    if(compare(s,[1]) == 0):
+        x = -1*bin2dec(x)
+        while(x < 0):
+            x += B
+        return x
+    return bin2dec(x)
 
 def Problem3b(A, B, C, D):
     '''
@@ -304,6 +310,15 @@ def PrimalityTest(N):
     return x
 
 if __name__ == "__main__":
+    print("20,79",ExGCD(20,79))
+    print("3,62",ExGCD(3,62))
+    print("21,91",ExGCD(21,91))
+    print("20,70",ExGCD(20,70))
+    print("20,79",ModInv(20,79))
+    print("3,62",ModInv(3,62))
+    print("21,91",ModInv(21,91))
+    print("20,70",ModInv(20,70))
+    print("91,20",ModInv(91,20))
 #    while True:
 #    PrimalityTest(16)
 #    PrimalityTest(2)
@@ -311,11 +326,11 @@ if __name__ == "__main__":
 #    PrimalityTest(17)
 #    PrimalityTest(997)
 #    PrimalityTest(104729)
-    print(ExGCD(1273,941))
-    print(ExGCD(13,9))
+    #print(ExGCD(1273,941))
+    #print(ExGCD(13,9))
     #        print(ExGCD(300,1321))
-    print(ExGCD(422,26424))
-    print(ExGCD(10,5))
+    #print(ExGCD(422,26424))
+    #print(ExGCD(10,5))
 #        print(ExGCD(17,33))
 ##        print(ExGCD(1273,941))
 #        print(ExGCD(13,9))
@@ -336,4 +351,4 @@ print(result)
                    
         
 
-        
+      
