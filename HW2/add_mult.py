@@ -241,15 +241,15 @@ def exGCD(A, B):
     if (zero(B)) :                          # Check if B is 0
         return [1], [], A, []                # Return (1,0,A)
     x, y, d, s = exGCD(B , mod(A,B))        # Recursive call with (x, y, GCD, sign)
-    # Check if x is zero. Since we need to subtract from this value 
-    # it will be come a negative number, so we will add to it instead.
-    # Check if y is zero. Since we need to subtract from this value 
-    # it will be come a negative number, so we will add to it instead.
-    # Otherwise, subtract x from the multiplication of y and the quotient of A,B.
     if(zero(x) or compare(s,[0,1]) == 2):
+        # Check if x is zero. Since we need to subtract from this value 
+        # it will be come a negative number, so we will add to it instead.
         s = [0,1]
         x = add(x,mult(quotient(A,B),y))
     elif(zero(y) or compare(s,[1]) == 1):
+        # Check if y is zero. Since we need to subtract from this value 
+        # it will be come a negative number, so we will add to it instead.
+        # Otherwise, subtract x from the multiplication of y and the quotient of A,B.
         s = [1]
         x = add(x,mult(quotient(A,B),y))
     else:
@@ -281,6 +281,8 @@ def modInv(A,B):
         return x # The inverse is a postive number.
     return [] # There is no modular inverse for the two passed numbers.
 
+# Return the decimal form of the binary representation for modular
+# inverse.
 def ModInv(A,B):
     x = modInv(dec2bin(A),dec2bin(B))
     return bin2dec(x)
@@ -296,8 +298,8 @@ def Problem3b(A, B, C, D):
 
 def primality2(N,k):
     for i in range (k):
-        a = spawnrandom(N)
-        if (compare(mod(exp(a,sub(N,[1])),N),[1]) != 0):
+        a = randomNumber(len(N))
+        if(compare(modExp(a,sub(N,[1]),N), [1]) != 0):
             return False
     return True
    
@@ -305,22 +307,18 @@ def Primality2(N,k):
     x = primality2(dec2bin(N),k)
     return x
 
-def spawnrandom(N):
-    x = randint(1,bin2dec(N)-1)
-    return dec2bin(x)
-
 def randomNumber(N):
     num = [1]
-    for i in range (N-2):
+    for i in range (N):
         num.append(randint(0,1))
     num.append(1)
-    return bin2dec(num)
+    return num
 
 def modExp(x,y,N):
     if(zero(y)):
         return [1]
-    z = modExp(x,quotient(y,[0,1]),N)
-    if (compare(mod(y,[0,1]),[]) == 0):
+    z = modExp(x,y[1:],N)
+    if (y[0] == 0):
         return mod(mult(z,z),N)
     else:
         return mod(mult(x,mult(z,z)),N)
@@ -329,36 +327,36 @@ def ModExp(A,e,M):
     return bin2dec(modExp(dec2bin(A),dec2bin(e),dec2bin(M)))
     
 def RSAKeyGenerate(N):
-    
+    x = 0
     while(True):
-        x = randomNumber(N)
+        x = bin2dec(randomNumber(N))
         if(x != 0):
             if(Primality2(x,10)):
                 if(Mod(x,3) == 2):
                     p = x
                     break
     while(True):
-        y = randomNumber(N)
+        y = bin2dec(randomNumber(N))
         if(y != 0):
             if(Primality2(y,10)):
-                if(Mod(y,3) == 2):
+                if(Mod(y,3) == 2 and y != x):
                     q = y
                     break
 
     n = mult(dec2bin(p),dec2bin(q))
-    return bin2dec(n),p,q
+    return bin2dec(n), p, q
 
 def RSAencrypt(M,e,N):
     return modExp(M,e,N)
 
 def RSAEncrypt(M,e,N):
-    return bin2dec(RSAencrypt(dec2bin(M),dec2bin(N),dec2bin(e)))
+    return bin2dec(RSAencrypt(dec2bin(M),dec2bin(e),dec2bin(N)))
     
 def RSAdecrypt(E,d,N):
     return modExp(E,d,N)
 
 def RSADecrypt(E,d,N):
-    return bin2dec(RSAdecrypt(dec2bin(E),dec2bin(N),dec2bin(d)))
+    return bin2dec(RSAdecrypt(dec2bin(E),dec2bin(d),dec2bin(N)))
 
 def RSAcreateD(P,Q,e):
     return modInv(e,mult(sub(P,[1]),sub(Q,[1])))
@@ -367,63 +365,26 @@ def RSACreateD(P,Q,e):
     return bin2dec(RSAcreateD(dec2bin(P),dec2bin(Q),dec2bin(e)))
 
 if __name__ == "__main__":
-    #randomNumber(5)
-    #x = Primality2(212, 8)
-    #print(x)
-    M =1234567890
-    print("Original Message",M)
-    N,p,q = RSAKeyGenerate(5)
-    print("p,q,N ",p,q,N)
-    d = RSACreateD(p,q,3)
-    print("D",d)
-    E = RSAEncrypt(M,3,N)
-    print("Encyrpted Message",E)
-    M = RSADecrypt(E,d,N)
-    print("Decrypted Message",M)
-'''
-    print("20,79",ExGCD(20,79))
-    print("3,62",ExGCD(3,62))
-    print("21,91",ExGCD(21,91))
-    print("20,70",ExGCD(20,70))
-    print("20,79",ModInv(20,79))
-    print("3,62",ModInv(3,62))
-    print("21,91",ModInv(21,91))
-    print("20,70",ModInv(20,70))
-    print("91,20",ModInv(91,20))
-'''
-#    while True:
-#    PrimalityTest(16)
-#    PrimalityTest(2)
-#    PrimalityTest(23)
-#    PrimalityTest(17)
-#    PrimalityTest(997)
-#    PrimalityTest(104729)
-
-
-    #print(ExGCD(1273,941))
-    #print(ExGCD(13,9))
-    #        print(ExGCD(300,1321))
-    #print(ExGCD(422,26424))
-    #print(ExGCD(10,5))
-#        print(ExGCD(17,33))
-##        print(ExGCD(1273,941))
-#        print(ExGCD(13,9))
-
-
-'''
-while True:
-option = int(raw_input("Enter option(1: test Problem3a, 2: test Problem3b, 3: quit): "))
-if option == 3:
-exit()
-A, B, C, D = map(int, raw_input("Enter four numbers between 0 and 1000(separated by spaces): ").split())
-if option == 1:
-result = Problem3a(A, B, C, D)
-print(result)
+    while True:
+        option = int(raw_input("Enter option (1: test extended GCD, 2: test primality, 3: test RSA key generate,\n 4: test RSA-encrypt and RSA-decrypt, 5: exit ): "))
+        if option == 5:
+             exit()
+        if option == 1:
+            A, B = map(int, raw_input("Enter two numbers for extended GCD (separated by spaces): ").split())
+            result = ExGCD(A,B)
+            print(result)
         if option == 2:
-result = Problem3b(A, B, C, D)
-print(result)
-''' 
-                   
-        
-
-      
+            A, B = map(int, raw_input("Enter two numbers for primality (N,k) (separated by spaces): ").split())
+            result = Primality2(A,B)
+            print(result)
+        if option == 3:
+            A = int(raw_input("Enter a bit length to create two primes with that length and a RSA public key: "))
+            N,P,Q = RSAKeyGenerate(A)
+            print "Public Key:", N , " P: ", P ," Q:", Q
+        if option == 4:
+            M = int(raw_input("Enter a message to encode (Will also show decrypted message): "))
+            E = RSAEncrypt(M,3,N)
+            print "Encrypted Message: ", E
+            d = RSACreateD(P,Q,3)
+            result = RSADecrypt(E,d,N)
+            print "Decrypted Message: ", result
