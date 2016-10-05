@@ -381,7 +381,7 @@ if __name__ == "__main__":
             print(result)
         if option == 3:
             A = int(raw_input("Enter a bit length to create two primes with that length and a RSA public key: "))
-            C = int(raw_input("enter a number for confidence: "))
+            C = int(raw_input("Enter a number for confidence: "))
             N,P,Q,d,e = RSAKeyGenerate(A,C)
             print "Public Key:", N , " P: ", P ," Q:", Q , "D:", d , "e:", e
         if option == 4:
