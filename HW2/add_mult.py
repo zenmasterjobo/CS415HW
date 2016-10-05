@@ -297,8 +297,11 @@ def Problem3b(A, B, C, D):
     return Divide(P, Q)
 
 def primality2(N,k):
+    # If the prime to check is 2 return true
+    if(compare(N,[0,1])== 0):
+        return True
     for i in range (k):
-        a = randomNumber(len(N))
+        a = randomA(len(N))
         if(compare(modExp(a,sub(N,[1]),N), [1]) != 0):
             return False
     return True
@@ -307,9 +310,20 @@ def Primality2(N,k):
     x = primality2(dec2bin(N),k)
     return x
 
+def randomA(N):
+    # if the length of the number is 2
+    if(N == 2):
+        num = dec2bin(randint(1,2))
+    else:
+        num = []
+        for i in range (N-2):
+            num.append(randint(0,1))
+        num.append(1)
+    return num
+    
 def randomNumber(N):
     num = [1]
-    for i in range (N):
+    for i in range (N-2):
         num.append(randint(0,1))
     num.append(1)
     return num
@@ -326,27 +340,30 @@ def modExp(x,y,N):
 def ModExp(A,e,M):
     return bin2dec(modExp(dec2bin(A),dec2bin(e),dec2bin(M)))
     
-def RSAKeyGenerate(N,C):
-    x = 0
+def RSAkeygenerate(N,k):
+    x = [0]
+    e = [1,1]
     while(True):
-        x = bin2dec(randomNumber(N))
-        if(x != 0):
-            if(Primality2(x,C)):
-                if(Mod(x,3) == 2):
+        x = randomNumber(N)
+        if(not zero(x)):
+            if(primality2(x,k)):
+                if(compare(mod(x,e),[0,1]) == 0):
                     p = x
                     break
     while(True):
-        y = bin2dec(randomNumber(N))
-        if(y != 0):
-            if(Primality2(y,C)):
-                if(Mod(y,3) == 2 and y != x):
-                    q = y
+        x = randomNumber(N)
+        if(not zero(x)):
+            if(primality2(x,k)):
+                if(compare(mod(x,e),[0,1]) == 0):
+                    q = x
                     break
-
-    n = mult(dec2bin(p),dec2bin(q))
-    e = 3
-    d = RSACreateD(p, q, e)
-    return bin2dec(n), p, q, d, e
+    n = mult(p,q)
+    d = RSAcreateD(p,q,e)
+    return p,q,n,d,e
+   
+def RSAKeyGenerate(N,k):
+    p,q,n,d,e = RSAkeygenerate(N,k)
+    return bin2dec(p),bin2dec(q),bin2dec(n),bin2dec(d),bin2dec(e)
 
 def RSAencrypt(M,e,N):
     return modExp(M,e,N)
@@ -381,12 +398,12 @@ if __name__ == "__main__":
             print(result)
         if option == 3:
             A = int(raw_input("Enter a bit length to create two primes with that length and a RSA public key: "))
-            C = int(raw_input("Enter a number for confidence: "))
-            N,P,Q,d,e = RSAKeyGenerate(A,C)
-            print "Public Key:", N , " P: ", P ," Q:", Q , "D:", d , "e:", e
+            A,K = map(int, raw_input("Enter a bit length and confidence level for RSA_Key_Generate: ").split())
+            P,Q,N,d,e = RSAKeyGenerate(A,K)
+            print "Public Key:", N , " P: ", P ," Q:", Q, " Decryption Key: ", d, " Encryption Key: ", e
         if option == 4:
             M = int(raw_input("Enter a message to encode (Will also show decrypted message): "))
-            E = RSAEncrypt(M,3,N)
+            E = RSAEncrypt(M,e,N)
             print "Encrypted Message: ", E
             result = RSADecrypt(E,d,N)
             print "Decrypted Message: ", result
