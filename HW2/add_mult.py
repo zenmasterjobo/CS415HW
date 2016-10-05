@@ -326,25 +326,27 @@ def modExp(x,y,N):
 def ModExp(A,e,M):
     return bin2dec(modExp(dec2bin(A),dec2bin(e),dec2bin(M)))
     
-def RSAKeyGenerate(N):
+def RSAKeyGenerate(N,C):
     x = 0
     while(True):
         x = bin2dec(randomNumber(N))
         if(x != 0):
-            if(Primality2(x,10)):
+            if(Primality2(x,C)):
                 if(Mod(x,3) == 2):
                     p = x
                     break
     while(True):
         y = bin2dec(randomNumber(N))
         if(y != 0):
-            if(Primality2(y,10)):
+            if(Primality2(y,C)):
                 if(Mod(y,3) == 2 and y != x):
                     q = y
                     break
 
     n = mult(dec2bin(p),dec2bin(q))
-    return bin2dec(n), p, q
+    e = 3
+    d = RSACreateD(p, q, e)
+    return bin2dec(n), p, q, d, e
 
 def RSAencrypt(M,e,N):
     return modExp(M,e,N)
@@ -379,12 +381,12 @@ if __name__ == "__main__":
             print(result)
         if option == 3:
             A = int(raw_input("Enter a bit length to create two primes with that length and a RSA public key: "))
-            N,P,Q = RSAKeyGenerate(A)
-            print "Public Key:", N , " P: ", P ," Q:", Q
+            C = int(raw_input("enter a number for confidence: "))
+            N,P,Q,d,e = RSAKeyGenerate(A,C)
+            print "Public Key:", N , " P: ", P ," Q:", Q , "D:", d , "e:", e
         if option == 4:
             M = int(raw_input("Enter a message to encode (Will also show decrypted message): "))
             E = RSAEncrypt(M,3,N)
             print "Encrypted Message: ", E
-            d = RSACreateD(P,Q,3)
             result = RSADecrypt(E,d,N)
             print "Decrypted Message: ", result
