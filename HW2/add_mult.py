@@ -384,6 +384,7 @@ def RSACreateD(P,Q,e):
     return bin2dec(RSAcreateD(dec2bin(P),dec2bin(Q),dec2bin(e)))
 
 if __name__ == "__main__":
+    N = False
     while True:
         option = int(raw_input("Enter option (1: test extended GCD, 2: test primality, 3: test RSA key generate,\n 4: test RSA-encrypt and RSA-decrypt, 5: exit ): "))
         if option == 5:
@@ -406,3 +407,4 @@ if __name__ == "__main__":
             print "Encrypted Message: ", E
             result = RSADecrypt(E,d,N)
             print "Decrypted Message: ", result
+
