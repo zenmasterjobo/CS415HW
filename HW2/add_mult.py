@@ -397,7 +397,6 @@ if __name__ == "__main__":
             result = Primality2(A,B)
             print(result)
         if option == 3:
-#            A = int(raw_input("Enter a bit length to create two primes with that length and a RSA public key: "))
             A,K = map(int,raw_input("Enter a bit length and confidence level for RSA_Key_Generate: ").split())
             P,Q,N,d,e = RSAKeyGenerate(A,K)
             print "Public Key:", N , " P: ", P ," Q:", Q, " Decryption Key: ", d, " Encryption Key: ", e
