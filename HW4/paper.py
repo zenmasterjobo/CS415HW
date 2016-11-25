@@ -27,7 +27,7 @@ class Node:
             a4 = node.a4 + 1
             a5 = node.a5 + 1
             cuts = node.cuts + 1
-        elif(piece == 2 and node.a4 != 0):
+        else:
             a2 = node.a2
             a3 = node.a3
             a4 = node.a4 - 1
@@ -37,9 +37,13 @@ class Node:
 
 a = Node(1,1,1,2,0)
 graph = {a:[a.cut(i) for i in range(3)]}
+for k,v in graph.items():
+    for i in v:
+        graph.update({i : [i.cut(k) for k in range(3)]})
 
 for k,v in graph.items():
     print "Parent Node: ", k
+    print "Connected Nodes:"
     for i in v:
-        print "Connected Nodes: ", i
+        print i
 
