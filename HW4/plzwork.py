@@ -4,6 +4,7 @@
 
 import sys
 
+count = 0
 sys.setrecursionlimit(100000000)
 class Node:
     def __init__(self, a2, a3, a4, a5, cuts):
@@ -93,13 +94,27 @@ class Node:
             i.graphGen()
 
     def printGraph(self):
+        global count
+        count += 1
+        if (self.finish()):
+            print self
+            return
+        print self
+        for i in self.children:
+            i.printGraph()
+
+    def printWorstCase(self):
         if (self.finish()):
             print self
             return 1
         print self
         for i in self.children:
-            return 1 + i.printGraph()
+            return 1 + i.printWorstCase()
+
 
 a = Node(1,1,1,2,0)
 a.graphGen()
-print a.printGraph()
+a.printGraph()
+print "Number of children (With Repeats)",count
+print "Expected Number of cuts (Worst Case) "
+print a.printWorstCase()
