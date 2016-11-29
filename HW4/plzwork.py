@@ -20,7 +20,7 @@ class Node:
         return (self.a2 == other.a2) and (self.a3 == other.a3) and \
             (self.a4 == other.a4) and (self.a5 == other.a5) and (self.cuts == other.cuts)
     def __str__(self):
-        return "({0},{1},{2},{3},{4})".format(self.a2, self.a3, self.a4, self.a5,self.cuts)
+        return "(a2: {0},a3: {1},a4: {2}, a5: {3},cuts: {4})".format(self.a2, self.a3, self.a4, self.a5,self.cuts)
     def grab(node):
 
         if(node.a2 != 0):
@@ -105,16 +105,13 @@ class Node:
 
     def printWorstCase(self):
         if (self.finish()):
-            print self
-            return 1
-        print self
+            return self.cuts
         for i in self.children:
-            return 1 + i.printWorstCase()
+            return i.printWorstCase()
 
 
 a = Node(1,1,1,2,0)
 a.graphGen()
 a.printGraph()
 print "Number of children (With Repeats)",count
-print "Expected Number of cuts (Worst Case) "
-print a.printWorstCase()
+print "Expected Number of cuts (Worst Case) ", a.printWorstCase()
